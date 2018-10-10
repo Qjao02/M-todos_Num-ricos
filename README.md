@@ -1,1 +1,2 @@
-Metodos Numéricos - eliminação de gauss e gauss seidel
+# Métodos Numéricos 
+Implementação dos metodos eliminação de gauss e gauss seidel em python
