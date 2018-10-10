@@ -45,8 +45,16 @@ def eliminacao_gauss(matriz, dimensao):
 
 
 
-def gaussSeidel(matriz, b, tol ,dimensao, n):
-   pass
+def gaussSeidel(matriz, b, tol ,dimensao, n, x_prox):
+    k = 0
+    for k in range(0,dimensao):
+        for i in range(dimensao):
+            alpha = 0
+            for j in range(i-1):
+                alpha += matriz[i][j] x[j]
+            j = i+1
+            for j in range(i+1,dimensao):
+                alpha = alpha + a[i][j] * b[i]
 
 
 
