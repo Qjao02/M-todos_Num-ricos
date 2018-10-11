@@ -1,16 +1,17 @@
+import sys
 def read_matriz_file():
     file = open('input/matriz.txt','r')
-    dimension = int(file.readline().replace('\n', ''))
+    dimensao = int(file.readline().replace('\n', ''))
     matriz = []
-    for line in file.readlines():
-        line = line.replace('\n','')
-        row = list(map(int, line.split(' ')))
-        matriz.append(row)
-    return dimension, matriz
+    rows = file.read().splitlines()
+    for line in rows:
+        matriz.append(list(map(float,line.split(' '))))
+
+    return dimensao, matriz
 
 def read_vetor_file():
     file = open('input/vetor.txt','r')
-    vetor = file.readline().split(' ')
+    vetor = list(map(float, file.readline().split(' ')))
     return vetor
 
 def eliminacao_gauss(matriz, dimensao):
@@ -44,30 +45,55 @@ def eliminacao_gauss(matriz, dimensao):
     return x, matriz
 
 
+def calc_erro(x_atual,x_ant):
+    num = []
+    for i in range (len(x_atual)):
+        num.append(abs(x_atual[i] - x_ant[i]))
 
-def gaussSeidel(matriz, b, tol ,dimensao, n, x_prox):
-    k = 0
-    for k in range(0,dimensao):
-        for i in range(dimensao):
+    err = max(num)/max(x_atual)
+    print(err)
+    return err
+
+
+def gaussSeidel(matriz, b, tol , stop ):
+
+    x_ant = []
+    x_atual = []
+    for i in range(len(b)):
+        x_ant.append(1)
+        x_atual.append(1)
+
+    k = 1
+    while(k <= stop):
+        for i in range(1,len(b)):
             alpha = 0
-            for j in range(i-1):
-                alpha += matriz[i][j] x[j]
-            j = i+1
-            for j in range(i+1,dimensao):
-                alpha = alpha + a[i][j] * b[i]
+            for j in range(1, i-1):
+                alpha = alpha + matriz[i][j] * x_atual[j]
+            for j in range(i+1, len(b)):
+                alpha = alpha + matriz[i][j] * x_ant[j]
+            x_atual[i] = (b[i] - alpha) / matriz[i][i]
 
+        if( calc_erro(x_atual,x_ant) < tol):
+            return x_atual
+        x_ant = x_atual
+        k = k+1
 
+    print('numero de iteracoes expirados')
+    return x_atual
 
 if __name__ == "__main__":
     dimensao, matriz = read_matriz_file()
     b = read_vetor_file()
-    #print(dimensao, matriz)
 
     #resposta para eliminação de gauss
-    response, matriz_escalonada = eliminacao_gauss(matriz, dimensao)
+     #response, matriz_escalonada = eliminacao_gauss(matriz, dimensao)
     #print(response)
     #print(matriz_escalonada)
 
+    response, matriz_escalonada = eliminacao_gauss(matriz, dimensao)
     #resposta para gauss seidel
     vetor = read_vetor_file()
     print(vetor)
+
+    response = gaussSeidel(matriz, vetor, 0.0000001, 50)
+    print('response for gauss seidel' + str(response))
