@@ -69,7 +69,7 @@ def gaussSeidel(matriz, b, tol , stop ):
             for j in range(i+1, len(b)):
                 alpha = alpha + matriz[i][j] * x_ant[j]
             x_atual[i] = (b[i] - alpha) / matriz[i][i]
-        
+
         if( calc_erro(x_atual,x_ant) < tol):
             return x_atual
         x_ant = x_atual
